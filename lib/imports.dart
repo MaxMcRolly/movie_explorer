@@ -1,0 +1,10 @@
+export 'package:flutter/material.dart';
+export 'package:movie_explorer/models/movie_short.dart';
+export 'package:flutter/src/widgets/framework.dart';
+export 'package:flutter/src/widgets/placeholder.dart';
+export 'package:movie_explorer/http_repository.dart';
+export 'dart:async';
+export 'package:flutter_bloc/flutter_bloc.dart';
+export 'package:movie_explorer/widgets/movie_card.dart';
+export 'package:movie_explorer/logic/bloc/search.dart';
+export 'package:movie_explorer/screens/search.dart';
