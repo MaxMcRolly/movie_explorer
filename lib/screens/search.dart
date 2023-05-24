@@ -11,6 +11,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     searchBloc.close();
+
     super.dispose();
   }
 
@@ -19,20 +20,34 @@ class _SearchScreenState extends State<SearchScreen> {
     return BlocProvider(
       create: (context) => searchBloc,
       child: Scaffold(
+        backgroundColor: Color(0xff232325),
         appBar: AppBar(
-          title: Text('Movie Search'),
+          elevation: 0,
+          backgroundColor: Color(0xff232325),
+          title: Text(
+            'Movie Explorer',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            Container(
+              margin: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: BoxDecoration(
+                color: Color(0xff454547),
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: TextField(
                 onChanged: (query) {
-                  searchBloc.add(PerformSearchEvent(query));
+                  searchBloc.performSearch(query);
                 },
+                style: Theme.of(context).textTheme.bodyMedium,
+                cursorColor: Colors.white,
                 decoration: InputDecoration(
-                  hintText: 'Search movies...',
-                ),
+                    hintText: 'Search for movies...',
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
+                    border: InputBorder.none),
               ),
             ),
             Expanded(
@@ -42,16 +57,23 @@ class _SearchScreenState extends State<SearchScreen> {
                     return Container();
                   } else if (state is SearchLoadingState) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: Colors.white),
                     );
                   } else if (state is SearchResultsState) {
                     final searchResults = state.searchResults;
+
                     return ListView.builder(
+                      cacheExtent: 5000,
                       itemCount: searchResults.length,
                       itemBuilder: (context, index) {
                         final movie = searchResults[index];
-                        return MovieResultCard(
-                          movie: movie,
+
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 8.0, left: 8, right: 8),
+                          child: MovieResultCard(
+                            movie: movie,
+                          ),
                         );
                       },
                     );
