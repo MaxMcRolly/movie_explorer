@@ -8,3 +8,13 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:movie_explorer/widgets/movie_card.dart';
 export 'package:movie_explorer/logic/bloc/search.dart';
 export 'package:movie_explorer/screens/search.dart';
+export 'package:movie_explorer/models/movie_full.dart';
+export 'package:movie_explorer/widgets/actor_card.dart';
+export 'package:movie_explorer/widgets/cached_image.dart';
+export 'package:movie_explorer/widgets/similar_movie_card.dart';
+export 'package:google_fonts/google_fonts.dart';
+export 'package:movie_explorer/theme.dart';
+export 'package:movie_explorer/screens/details.dart';
+
+export 'package:movie_explorer/models/actor.dart';
+export 'package:movie_explorer/models/similar_movie.dart';
