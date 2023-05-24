@@ -21,7 +21,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(SearchInitialState()) {
     _searchSubscription = _searchSubject
         .distinct()
-        .debounceTime(Duration(milliseconds: 500))
+        .debounceTime(Duration(milliseconds: 700))
         .listen((query) {
       if (_isSearching) {
         _searchSubscription.cancel();
