@@ -28,9 +28,7 @@ class MovieResultCard extends StatelessWidget {
             Container(
               height: 108,
               width: 125,
-              child: FittedBox(
-                child: CachedImage(url: movie.image!),
-              ),
+              child: CachedImage(url: movie.image!),
             ),
             SizedBox(
               width: 8,
