@@ -1,4 +1,6 @@
 import 'package:movie_explorer/imports.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 abstract class SearchEvent {}
 
@@ -10,7 +12,26 @@ class PerformSearchEvent extends SearchEvent {
 
 // Bloc
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc() : super(SearchInitialState());
+  final _searchSubject = BehaviorSubject<String>();
+
+  late StreamSubscription<String> _searchSubscription;
+
+  bool _isSearching = false;
+
+  SearchBloc() : super(SearchInitialState()) {
+    _searchSubscription = _searchSubject
+        .distinct()
+        .debounceTime(Duration(milliseconds: 500))
+        .listen((query) {
+      if (_isSearching) {
+        _searchSubscription.cancel();
+      }
+
+      _isSearching = true;
+
+      add(PerformSearchEvent(query));
+    });
+  }
 
   @override
   Stream<SearchState> mapEventToState(SearchEvent event) async* {
@@ -19,15 +40,32 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       try {
         final results = await httpRepository.searchMovies(event.query);
+
         yield SearchResultsState(results);
       } catch (error) {
         yield SearchErrorState('Error searching movies');
+      } finally {
+        _isSearching = false;
       }
     }
   }
+
+  @override
+  Future<void> close() {
+    _searchSubject.close();
+
+    _searchSubscription.cancel();
+
+    return super.close();
+  }
+
+  void performSearch(String query) {
+    _searchSubject.add(query);
+  }
 }
 
-// Bloc state
+// States
+
 abstract class SearchState {}
 
 class SearchInitialState extends SearchState {}
